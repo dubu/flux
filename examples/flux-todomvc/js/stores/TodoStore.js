@@ -14,9 +14,23 @@ var EventEmitter = require('events').EventEmitter;
 var TodoConstants = require('../constants/TodoConstants');
 var assign = require('object-assign');
 
+
+var Immutable = require('immutable');
+
+const client = require('../client');
+
 var CHANGE_EVENT = 'change';
 
 var _todos = {};
+
+var OrderedMap = Immutable.OrderedMap;
+
+// Get new OrderedMap
+function getOm(arr) {
+  return OrderedMap().withMutations(map => {
+    arr.forEach(item => map.set(item.id, item))
+  })
+}
 
 /**
  * Create a TODO item.
@@ -32,6 +46,28 @@ function create(text) {
     complete: false,
     text: text
   };
+
+  //save
+  client({
+    method: 'POST',
+    path: 'http://rest.learncode.academy/api/dubu/todos',
+    entity: _todos[id],
+    headers: {'Content-Type': 'application/json'}
+  });
+  //
+  //client({method: 'POST', path: 'http://rest.learncode.academy/api/dubu/todos'}).done(response => {
+  //  //console.log(response.entity);
+  //  //_todos = response.entity[0].name;
+  //  //_todos = response.entity[0];
+  //  var myOrderedMap = getOm(response.entity);
+  //  _todos = myOrderedMap.toObject();
+  //  //this.setState({employees: response.entity._embedded.employees});
+  //  console.log(_todos);
+  //});
+
+
+
+  //console.log(_todos);
 }
 
 /**
@@ -42,6 +78,15 @@ function create(text) {
  */
 function update(id, updates) {
   _todos[id] = assign({}, _todos[id], updates);
+
+  client({
+    method: 'PUT',
+    path: 'http://rest.learncode.academy/api/dubu/todos',
+    entity: _todos[id],
+    headers: {'Content-Type': 'application/json'}
+  });
+
+  //console.log(_todos);
 }
 
 /**
@@ -94,6 +139,17 @@ var TodoStore = assign({}, EventEmitter.prototype, {
    * @return {object}
    */
   getAll: function() {
+
+    client({method: 'GET', path: 'http://rest.learncode.academy/api/dubu/todos'}).done(response => {
+      //console.log(response.entity);
+      //_todos = response.entity[0].name;
+      //_todos = response.entity[0];
+      var myOrderedMap = getOm(response.entity);
+      _todos = myOrderedMap.toObject();
+      //this.setState({employees: response.entity._embedded.employees});
+      console.log(_todos);
+    });
+
     return _todos;
   },
 
