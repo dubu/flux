@@ -158,7 +158,7 @@ var TodoStore = assign({}, EventEmitter.prototype, {
       var myOrderedMap = getOm(response.entity);
       _todos = myOrderedMap.toObject();
       //this.setState({employees: response.entity._embedded.employees});
-      console.log(_todos);
+      //console.log(_todos);
     });
 
     return _todos;

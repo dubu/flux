@@ -25,9 +25,9 @@ var MainSection = React.createClass({
   render: function() {
     // This section should be hidden by default
     // and shown when there are todos.
-    if (Object.keys(this.props.allTodos).length < 1) {
-      return null;
-    }
+    //if (Object.keys(this.props.allTodos).length < 1) {
+    //  return null;
+    //}
 
     var allTodos = this.props.allTodos;
     var todos = [];
