@@ -81,7 +81,7 @@ function update(id, updates) {
 
   client({
     method: 'PUT',
-    path: 'http://rest.learncode.academy/api/dubu/todos',
+    path: 'http://rest.learncode.academy/api/dubu/todos/'+id,
     entity: _todos[id],
     headers: {'Content-Type': 'application/json'}
   });
@@ -105,7 +105,18 @@ function updateAll(updates) {
  * @param  {string} id
  */
 function destroy(id) {
+
   delete _todos[id];
+
+  client({
+    method: 'DELETE',
+    path: 'http://rest.learncode.academy/api/dubu/todos/'+id,
+    headers: {'Content-Type': 'application/json'}
+  }).done(response => {
+    console.log(response);
+  });
+
+
 }
 
 /**
