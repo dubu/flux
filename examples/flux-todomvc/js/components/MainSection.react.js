@@ -11,9 +11,37 @@ var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var TodoActions = require('../actions/TodoActions');
 var TodoItem = require('./TodoItem.react');
+const client = require('../client');
+var OrderedMap = Immutable.OrderedMap;
+
+// Get new OrderedMap
+function getOm(arr) {
+  return OrderedMap().withMutations(map => {
+    arr.forEach(item => map.set(item.id, item))
+  })
+}
+
 
 var MainSection = React.createClass({
 
+  getInitialState: function() {
+
+    client({method: 'GET', path: 'http://rest.learncode.academy/api/dubu/todos'}).done(response => {
+      //console.log(response.entity);
+      //_todos = response.entity[0].name;
+      //_todos = response.entity[0];
+      var myOrderedMap = getOm(response.entity);
+      _todos = myOrderedMap.toObject();
+      //this.setState({employees: response.entity._embedded.employees});
+      allTodos = _todos;
+      console.log(allTodos);
+      TodoActions.destroyCompleted();
+    });
+
+    return null;
+  },
+
+  //console.log("xxxx");
   propTypes: {
     allTodos: ReactPropTypes.object.isRequired,
     areAllComplete: ReactPropTypes.bool.isRequired
