@@ -27,14 +27,10 @@ var MainSection = React.createClass({
   getInitialState: function() {
 
     client({method: 'GET', path: 'http://rest.learncode.academy/api/dubu/todos'}).done(response => {
-      //console.log(response.entity);
-      //_todos = response.entity[0].name;
-      //_todos = response.entity[0];
       var myOrderedMap = getOm(response.entity);
       _todos = myOrderedMap.toObject();
-      //this.setState({employees: response.entity._embedded.employees});
       allTodos = _todos;
-      console.log(allTodos);
+      //console.log(allTodos);
       TodoActions.destroyCompleted();
     });
 
@@ -53,6 +49,7 @@ var MainSection = React.createClass({
   render: function() {
     // This section should be hidden by default
     // and shown when there are todos.
+
     //if (Object.keys(this.props.allTodos).length < 1) {
     //  return null;
     //}
